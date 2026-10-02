@@ -1,0 +1,28 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jack For You Store</title><style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif}
+#home{min-height:100vh;background:#000 url("Nama Proyek 9.png") center/cover no-repeat;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8vh}
+.check,.order{background:#fff;color:#000;text-decoration:none;font-weight:800;border-radius:8px}.check{padding:16px 42px}
+#stok{padding:55px 16px 80px;min-height:100vh;background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.88)),#111}
+h1{text-align:center;margin:0 0 8px}.line{width:70px;height:2px;background:#fff;margin:auto}.sub{text-align:center;color:#ccc;margin:12px 0 35px}
+.grid{max-width:1000px;margin:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:22px}.card{border:1px solid #333;border-radius:12px;padding:12px;background:rgba(8,8,8,.9)}
+.photo{aspect-ratio:9/16;border-radius:8px;background:#151515;display:flex;align-items:center;justify-content:center;color:#777;font-weight:bold;background-position:center;background-size:cover;overflow:hidden}
+.spec{background:#fff;color:#000;border-radius:8px;padding:14px;margin-top:10px;min-height:90px;line-height:1.5}.order{display:block;text-align:center;padding:13px;margin-top:10px}
+#editor{max-width:1000px;margin:45px auto 0;border-top:1px solid #333;padding-top:30px}#editor h2{text-align:center}
+label{display:block;margin:12px 0 6px;color:#ccc}select,input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#111;color:#fff}textarea{min-height:110px}
+button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:8px;font-weight:800}.note{font-size:12px;color:#888;text-align:center}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<section id="home"><a class="check" href="#stok">CEK STOK</a></section>
+<section id="stok"><h1>JACK FOR YOU STORE</h1><div class="line"></div><p class="sub">STOK : 0882007263871</p><div class="grid" id="grid"></div>
+<div id="editor"><h2>EDIT STOK</h2><label>Pilih stok</label><select id="which"></select><label>Foto stok</label><input id="photoInput" type="file" accept="image/*"><label>Spesifikasi</label><textarea id="specInput"></textarea><button onclick="saveStock()">SIMPAN STOK</button><p class="note">Foto dan spesifikasi tersimpan di browser HP ini.</p></div></section>
+<script>
+const grid=document.getElementById('grid'),which=document.getElementById('which');let cards='';
+for(let i=1;i<=20;i++){which.innerHTML+=`<option value="${i}">STOK #${i}</option>`;cards+=`<article class="card"><div class="photo" id="photo-${i}">FOTO STOK #${String(i).padStart(2,'0')}</div><div class="spec" id="spec-${i}"><b>STOK #${i}</b><br>isi spesifikasi stok #${i}</div><a class="order" href="https://wa.me/62882007263871?text=${encodeURIComponent('halo bang, mo beli stok '+i)}" target="_blank">ORDER NOW</a></article>`}grid.innerHTML=cards;
+function load(i){let s=localStorage.getItem('jack_spec_'+i),img=localStorage.getItem('jack_img_'+i);document.getElementById('spec-'+i).innerHTML=s||`<b>STOK #${i}</b><br>isi spesifikasi stok #${i}`;let x=document.getElementById('photo-'+i);if(img){x.style.backgroundImage=`url("${img}")`;x.textContent=''}else{x.style.backgroundImage='';x.textContent='FOTO STOK #'+String(i).padStart(2,'0')}}
+for(let i=1;i<=20;i++)load(i);
+function editor(){let i=+which.value;document.getElementById('specInput').value=(localStorage.getItem('jack_spec_'+i)||`STOK #${i}
+isi spesifikasi stok #${i}`).replaceAll('<br>','
+');document.getElementById('photoInput').value=''}which.onchange=editor;editor();
+function saveStock(){let i=+which.value,s=document.getElementById('specInput').value;localStorage.setItem('jack_spec_'+i,s.replaceAll('
+','<br>'));let f=document.getElementById('photoInput').files[0];if(f){let r=new FileReader;r.onload=()=>{localStorage.setItem('jack_img_'+i,r.result);load(i)};r.readAsDataURL(f)}else load(i);alert('stok #'+i+' berhasil disimpan')}
+</script></body></html>
